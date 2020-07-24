@@ -1,0 +1,16 @@
+current directory: /home/kali/deployedwebsites/freddieventura.github.io/vendor/cache/ruby/2.7.0/gems/eventmachine-1.2.7/ext/fastfilereader
+/usr/bin/ruby2.7 -I /usr/lib/ruby/2.7.0 -r ./siteconf20200724-65617-175r7kw.rb extconf.rb
+creating Makefile
+
+current directory: /home/kali/deployedwebsites/freddieventura.github.io/vendor/cache/ruby/2.7.0/gems/eventmachine-1.2.7/ext/fastfilereader
+make "DESTDIR=" clean
+
+current directory: /home/kali/deployedwebsites/freddieventura.github.io/vendor/cache/ruby/2.7.0/gems/eventmachine-1.2.7/ext/fastfilereader
+make "DESTDIR="
+compiling mapper.cpp
+compiling rubymain.cpp
+linking shared-object fastfilereaderext.so
+
+current directory: /home/kali/deployedwebsites/freddieventura.github.io/vendor/cache/ruby/2.7.0/gems/eventmachine-1.2.7/ext/fastfilereader
+make "DESTDIR=" install
+/usr/bin/install -c -m 0755 fastfilereaderext.so ./.gem.20200724-65617-eaz0p5
