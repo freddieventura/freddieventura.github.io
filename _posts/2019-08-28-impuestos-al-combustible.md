@@ -1,6 +1,10 @@
 ---
 title: Impuestos al Combustible 
 tags:  articulos, economia, medio ambiente, internacional, industria aerea
+article_header:
+  type: cover
+  image:
+    src: /images/impuestos-al-01.jpg
 ---
 
 ## El Remordimiento a Volar

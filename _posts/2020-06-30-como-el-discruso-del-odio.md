@@ -1,6 +1,10 @@
 ---
 title: Como el discurso enajenado ha encontrado el punto debil de Facebook 
 tags:  articulos, economia, redes sociales, tecnologia, internacional
+article_header:
+  type: cover
+  image:
+    src: /images/como-el-01.jpg
 ---
 
 ## Como el discurso enajenado ha encontrado el punto debil de Facebook
@@ -25,6 +29,8 @@ Con humildad, El anuncia una serie de nuevas medidas, que incluyen la prohibicio
 Asad Moghal, un ejecutivo senior de contenido diital de la consultora Byfield, valoro que la accion de Unilever de todas iba a forzar una respuesta de Zuckerberg. "Cuando tal gigante internacional decide que la inaccion no es una opcion para combatir el racismo y el lenguaje discriminatorio, entonces la industria de las redes sociales necesita escuhar".
 
 "Tomando una accion financiera, una companhia del tamanho de Unilever puede tener efecto y forzar a Twitter y Facebook; los anunciantes han decidido que necesitan protejer su reputacion corporativa y no pueden seguir estando asociados con una plataforma que sirve el discurso del odio y un contenido divisivo. Pero , lo que realmente puede llegar a tener un efecto grande es si este viraje crea un efecto domino en otras empresas de renombre haciendo que retiren sus inversiones en la plataforma"
+
+![Facebook](/images/como-el-02.jpg "Facebook")
 
 La cadena de anuncios establece las primeras concesiones por parte de Facebook hacia una coalicion. Parar el Odio por el Benificio, que se ha levantado tras el asesinato de George Floyd en Mayo.
 

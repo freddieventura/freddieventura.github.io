@@ -1,6 +1,10 @@
 ---
 title: El Remordimiento a Volar
 tags:  articulos, economia, medio ambiente, internacional
+article_header:
+  type: cover
+  image:
+    src: /images/el-remordimiento-01.jpg
 ---
 
 ## El Remordimiento a Volar
@@ -30,6 +34,8 @@ Volker Grewe, profesor de física atmosférica del Centro Aeroespacial Alemán (
  La creciente amenaza de un varapalo comercial por parte de los consumidores no es una sorpresa por parte de la industria aérea. Algunas ejecutivas han intentado centrarse en el problema de las emisiones desde al menos hace una década. IATA, la agencia internacional de la aviación, ha dado su compromiso en 2009 que la industria habrá reducido a la mitad los niveles de emisión relativos a 2005 para 2050.  
 “Es muy ambicioso” indica un portavoz de la Iata Chris Goater “Tenemos una gran responsabilidad y es un reto enorme llevar esto a cabo”.  
 Algunas aerolíneas, especialmente Europeas donde los consumidores son más sensibles al tema, están fijando sus primeros compromisos. SAS ha dicho que reducirá sus emisiones un 25% para 2030 y está apuntando a utilizar biocombustibles en sus vuelos domésticos.  
+
+![El remordimiento a volar](/images/el-remordimiento-02.jpg "El Remordimiento a volar")
 
 LAG, la propietaria de Iberia y British Airways, ha dado su compromiso de invertir 400 millones de $ en desarrollar combustibles alternativos para un periodo de 20 años, así United Airlines ha expresado que gastara 2.000 millones de $ al año en aviones eficientes en combustible y a su vez está trabajando con productores de biocombustible. Explorando otras opciones la aerolínea Holandesa KLM incluso ha llegado a lanzar una campaña instando a los pasajeros a volar menos. Incluye consejos como “considere hacer video llamadas en vez de reuniones cara a cara” y “explore otras opciones de transporte” como el tren para distancias más cortas.  
 
