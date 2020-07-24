@@ -1,6 +1,10 @@
 ---
 title: Los Ataques Amenazan la confianza en las Reservas de Petroleo Saudies
 tags: noticias, petroleo, economia, terrorismo, internacional, arabia saudi
+article_header:
+  type: cover
+  image:
+    src: /images/los-ataques-01.jpg
 ---
 
 ## Los Ataques Amenazan la confianza en las Reservas de Petroleo Saudies.
@@ -15,6 +19,8 @@ Las cuestiones que nos vienen ahora son simples: Cuánto le llevará restablecer
 Pero la mayor consecuencia de los ataques para los inversores en petróleo y la economía real es ver si realmente la imagen de invencibilidad de Arabia Saudita ha sido hecha añicos, en las instalaciones de Abráis, la cual procesa casi el 70 por ciento de la producción del mayor exportador de petróleo mundial. Continúa el hilo de otros asaltos en las infraestructuras Energéticas del Reino, pero éste es el más significativo de los últimos 50 años.   
 
 Rystad Energy, un consultor, indica que los ataques “han puesto patas arriba el mercado durante el fin de semana” amenazando con alterar la percepción de la abundancia de reservas de petróleo respaldada por el boom del fracking en EEUU cinco años antes, que ha disminuido los precios de petróleo en el planeta. “La situación en Oriente Próximo se ha tornado bastante más frágil”, Rystad concluye.    
+
+![Los ataques de drones en Arabia Saudi](/images/los-ataques-02.jpg "Imagenes de los ataques")
 
 EEUU ha acusado a Irán de los ataques sugiriendo que puede que no se hayan originado en Yemen, en donde la primera milicia respaldada públicamente por Irán opera “Houthi”. Se ha informado que algunos oficiales de Estados Unidos se han cuestionado incluso si el ataque se ha realizado con drones, como se ha publicado, o con misiles lanzados desde un país vecino a primeras horas del Sábado.    
 Irán ha denegado su implicación en el ataque. Sea de donde venga el origen, los inversores en petróleo han de asumir ahora que los enemigos de Arabia Saudita son capaces de atacar el corazón del Reino, apuntando a sus infraestructuras y campos de petróleo. Ello amenaza con arrasar la reputación del país como un productor contrastado y fiable de petróleo, una marca que llevan décadas cultivando.     
