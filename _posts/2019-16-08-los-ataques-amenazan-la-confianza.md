@@ -1,7 +1,6 @@
 ---
 layout: article
 title: Los Ataques Amenazan la confianza en las Reservas de Petroleo Saudies
-date: 16-08-2019 18:23:10
 tags: noticias, petroleo, economia, terrorismo, internacional, arabia saudi
 mathjax: true
 ---

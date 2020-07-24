@@ -1,7 +1,6 @@
 ---
 layout: article
 title: Los saudis buscan calmar a los mercados tras el ataque que ha cortado la produccion de petroleo por la mitad
-date: 16-08-2019 14:43:28 
 tags: noticias, petroleo, economia, terrorismo, internacional, arabia saudi
 mathjax: true
 ---

@@ -2,7 +2,6 @@
 layout: article
 title: Impuestos al Combustible 
 tags:  articulos, economia, medio ambiente, internacional, industria aerea
-date:  28-08-2019 13:24:43 
 mathjax: true
 ---
 
