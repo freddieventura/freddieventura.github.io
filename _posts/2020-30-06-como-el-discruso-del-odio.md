@@ -2,7 +2,7 @@
 layout: article
 title: Como el discurso enajenado ha encontrado el punto debil de Facebook 
 tags:  articulos, economia, redes sociales, tecnologia, internacional
-date: 2020-30-06 14:43:28 
+date: 06-30-2020 14:43:28 
 mathjax: true
 ---
 
