@@ -1,10 +1,7 @@
 ---
-layout: post
 title: El Remordimiento a Volar
 tags:  articulos, economia, medio ambiente, internacional
-cover: cover.jpg
 date:  28-08-2019 09:32:20 
-categories: posts
 ---
 
 ## El Remordimiento a Volar

@@ -1,10 +1,7 @@
 ---
-layout: post
 title: Como el discurso enajenado ha encontrado el punto debil de Facebook 
 tags:  articulos, economia, redes sociales, tecnologia, internacional
-cover: cover.jpg
 date: 2020-30-06 14:43:28 
-categories: posts
 ---
 
 ## Como el discurso enajenado ha encontrado el punto debil de Facebook

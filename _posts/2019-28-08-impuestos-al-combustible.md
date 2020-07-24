@@ -1,10 +1,7 @@
 ---
-layout: post
 title: Impuestos al Combustible 
 tags:  articulos, economia, medio ambiente, internacional, industria aerea
-cover: cover.jpg
 date:  28-08-2019 13:24:43 
-categories: posts
 ---
 
 ## El Remordimiento a Volar
