@@ -1,7 +1,9 @@
 ---
+layout: article
 title: El Remordimiento a Volar
 tags:  articulos, economia, medio ambiente, internacional
 date:  28-08-2019 09:32:20 
+mathjax: true
 ---
 
 ## El Remordimiento a Volar
