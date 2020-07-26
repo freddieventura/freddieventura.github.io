@@ -8,3 +8,16 @@ article_header:
 ---
 
 Empty totaly emptyness
+
+
+Success Text.
+{:.success}
+
+Info Text.
+{:.info}
+
+Warning Text.
+{:.warning}
+
+Error Text.
+{:.error}
