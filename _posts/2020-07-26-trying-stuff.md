@@ -10,7 +10,6 @@ article_header:
 > El gobierno ya ha provisto de 1.6 £ billones de inyección la cual ya ha sido casi empleada por completo.  
 
 > Transport for London ha sido forzado a pedir al gobierno un segundo plan de rescate hoy al haber soportado un agujero negro de cerca de 5£ billones por la crisis del Covid.   
-
 Tfl ha pedido al gobierne otro paquete de rescate de 2£ de libras para poder mantener la red tras la caida masiva de pasajeros debido al Estado de Alarma.  
 Este agujero negro ha supuesto que se tengan que aplazar numeros proyectos alzando cuestiones sobre el futuro de las nuevas lineas y la posibilidad de un aumento en sus tarifas.   
 El gobierno ya ha provisto de 1.6£ billones que seran requeridos en 2021-22, de acuerdo con la revisión de presupuestos publicada hoy.  
