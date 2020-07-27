@@ -1,6 +1,8 @@
 ---
 title: Trying stuff
 tags: Trying, sample, 
+author: Freddie Ventura
+show_auto_profile: true
 #article_header:
 #  type: cover
 #  image:
