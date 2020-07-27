@@ -22,4 +22,4 @@ Warning Text.
 Error Text.
 {:.error}
 
-<div>{%- include extensions/soundcloud.html id='865095196865095196865095196865095196865095196865095196865095196865095196' -%}</div>
+<div>{%- include extensions/soundcloud.html id='865095196' -%}</div>
