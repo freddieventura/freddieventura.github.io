@@ -21,3 +21,5 @@ Warning Text.
 
 Error Text.
 {:.error}
+
+{%- include extensions/soundcloud.html id='313627932' -%}
