@@ -25,3 +25,11 @@ Error Text.
 {:.error}
 
 <div>{%- include extensions/soundcloud.html id='865095196' -%}</div>
+
+|-----------------|-------------------|
+| This is a table | Amazing           |
+|-----------------|-------------------|
+| in this table   | you will be shown |
+| how to be       | awesome           |
+| in just         | some lines        |
+|-----------------|-------------------|
