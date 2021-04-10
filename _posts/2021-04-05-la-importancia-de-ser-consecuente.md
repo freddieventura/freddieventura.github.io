@@ -3,6 +3,7 @@ title: La Importancia de ser consecuente
 tags: ensayo, etica, 
 author: Freddie Ventura
 show_auto_profile: true
+published: false
 article_header:
   type: cover
   image:

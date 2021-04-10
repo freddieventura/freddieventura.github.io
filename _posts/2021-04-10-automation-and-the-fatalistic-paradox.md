@@ -6,7 +6,7 @@ show_auto_profile: true
 article_header:
   type: cover
   image:
-    src: /images/automation-and-fatalistic-01.jpg
+    src: /images/automation-and-fatalistic-03.jpg
 ---
 
 Recent these days I've hold a friendly discussion with a man that claimed to be a Tory, and it was quite enlightening on the point that the guy was a young individual, rock grunge looking dude that you may have not expected to hold such an ideology, I like to see people breaking the cliches in such a way.
@@ -24,7 +24,7 @@ The desired consequence of this is thatone , but the undesired trade-off origina
 This last part is a psycological remant, or not just remant but something that we have built in our genes, and that is the **sole purpose of our existence**.
 We get an straight good feed from our brains in the form of neurotransmitters, whenever we accomplish a task that will set ourselves in a better position towards our objective of surviving. Nowadays we don't need to go on a raid with other fellow humans to go and hunt down mammoths, but we pretty much do so by doing the Laundry everyonce in a week, go to work to get those magic **green paper grain** that allow us get food, which we then cook to turn it to a meal. 
 
-![Automation and the Fatalistic Paradox Image 1](/images/automation-and-fatalistic-03.jpg)
+![Automation and the Fatalistic Paradox Image 1](/images/automation-and-fatalistic-01.jpg)
 
 A day in a human is not that different as it used to be in terms of our relationship with the environment, and although all the things we do in a day are not 100% survival focused there is a sheer amount of them, although we have entretainments such as games, music and some other forms of leisure that are not strictly related to survival. 
 In this we can say that we may be able to swap time from the survival tasks , into leisure one. Still a human need to feel that is accomplish something, and this substitution process have to be gradual, otherwise you can deem someone as **useless**.  
