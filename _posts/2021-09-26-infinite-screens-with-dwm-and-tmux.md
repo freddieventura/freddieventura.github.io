@@ -84,4 +84,34 @@ tmux attach -t t1
 
 Repeat the process as many times as you want, with Care :) .
 
+### Edit1 26/09/2021 Issue with Clipboard
+
+I have noticed that the Clipboard was not been shared properly among these `ssh`ed shared tmux session's , and it was due to a strange behaviour on `tmux` with theseones , the `$DISPLAY` environment variable of the system was not setted for succesive Pane's and Window splits (whereas for the first shared Pane if you `echo $DISPLAY` it will output `:0`). 
+
+After following this [article](https://goosebearingbashshell.github.io/2017/12/07/reset-display-variable-in-tmux.html) the solution it seems to work for me.
+
+Just add this line to `vi ~/.bashrc`
+
+```
+## tmux issue with ssh shared sessions and DISPLAY variable
+export DISPLAY="`tmux show-env | sed -n 's/^DISPLAY=//p'`"
+```
+
+You may have to also add this line to `vi ~/.tmux.conf`
+```
+# Solving issue with $DISPLAY and ssh shared tmux sessions
+set-option -g update-environment " DISPLAY"
+```
+
+If with the two modifications above you still have some issues, update tmux to the last version. `tmux -V` I use to have `2.8` for `Debian 10 Buster Stable` but you can build your own from source with the following commands
+
+```
+sudo apt install libevent-dev
+sudo apt install byacc
+git clone https://github.com/tmux/tmux
+cd tmux
+./configure && make
+sudo make install
+```
+
 All credit goes to [Mr Bakkeby](https://github.com/bakkeby/) , he is the author of this patch.
