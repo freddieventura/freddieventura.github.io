@@ -99,7 +99,8 @@ ip addr
 ```
 You should see one named dns0 
 
-##### 5th) Change the routes on the client
+Note: Next step 5 have two Alternatives, either follow one of them
+##### 5th) Alternative A) Routing traffic through the tunnel
 
 We need to change the Default Gateway which is established to be the one of the Network, you need to use that route only for the DNS tunnel specifically (so to your VPS) , the rest is gonna go through the DNS tunnel link connection established
 
@@ -117,6 +118,19 @@ ping bbc.com
 ```
 
 Pacience it will be slow, you can use the browser but it will take some time to load a fully featured website.
+
+
+##### 5th) Alternative B) Setting up a SOCKS proxy through the tunnel
+
+In case you don't want to be fiddeling with the routes you can simply set up a socks proxy such as from the client
+
+```
+ssh -D 9050 $yourVPSIp
+
+ssh -D 9050 192.100.200.45
+```
+
+Then use `proxychains` or set up the browser accordingly to `SOCKS v5 proxy 127.0.0.1 Port 9050`
 
 
 Thumbs up to the developers who did [iodine](https://github.com/yarrick/iodine/) for making us aware of such a vulnerability. 
