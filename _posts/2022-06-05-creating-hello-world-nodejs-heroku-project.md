@@ -4,7 +4,7 @@ tags:  heroku, javascript, js, nodejs
 article_header:
   type: cover
   image:
-    src: images/heroku-largebanner001.jpg
+    src: images/heroku-largebanner001.png
 ---
 
 ## Creating a simple Hello World Nodejs Heroku Project
