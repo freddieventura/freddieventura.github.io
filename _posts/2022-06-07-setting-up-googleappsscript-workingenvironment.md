@@ -332,3 +332,149 @@ clasp run main
 ```
 
 Sweating tears and blood we have tamed Google's beast.
+Just to recap I have made a diagram [setup clasp to run a function gist](https://gist.github.com/450c68f34830a9d19c01b7a3a7200095)
+
+
+```
+
+// diagram-setup-clasp-to-run-functions.txt
+//  	by freddieventura
+//			https://github.com/freddieventura
+
+Follow from Step0 to Step 9 the path to be able to execute
+clasp run functionName
+
+ --------------------------------------------------
+|    ____ _                                       |
+|   / ___| | __ _ ___ _ __                        |
+|  | |   | |/ _` / __| '_ \                       |
+|  | |___| | (_| \__ \ |_) |                      |
+|   \____|_|\__,_|___/ .__/                       |
+|                    |_|                          |
+|                                                 |
+|      ------------------------------------------ |
+|     |config files                              ||
+|     |  ----------------------------------------||
+|     | |system wide                            |||
+|     | |       stored in ~/                    |||
+|     | |   ---------------------------------   |||
+|     | |  |~/.clasprc.json                 |   |||
+|     | |  |clasp login                     |   ||| Step0
+|     | |  |             Objects            |   |||
+|     | |  |             ------------------ |   |||
+|     | |  |            |token              |   |||
+|     | |  |            |oauth2ClientSettings   |||
+|     | |  |            |      (....)       |   |||
+|     | |   ---------------------------------   |||
+|     |  ----------------------------------------||
+|     | |scipt specific                         |||
+|     | |         stored in ./path/to/project/  |||
+|     | |   ---------------------------------   |||
+|     | |  |~/script/appscript.json         |   |||
+|     | |  |clasp create --title "script1"  |   |||Step1
+|     | |  |             Objects            |   |||
+|     | |  |             ------------------ |   |||
+|     | |  |            |timeZone           |   |||
+|     | |  |            |dependencies       |   |||
+|     | |  |            |exceoptionLogging  |   |||
+|     | |  |            |runtimeVersion     |   |||
+|     | |  |            |executionApi     ----->    
+|     | |  |            |  access: ANYONE -----> Do it manually   Step7
+|     | |  |            |                   |   |||
+|     | |  |            |                   |   |||
+|     | |   ---------------------------------   |||
+|     | |   ---------------------------------   |||
+|     | |  |~/script/.clasp.json            |   |||
+|     | |  |clasp create --title "script1"  |   |||
+|     | |  |             Objects            |   |||
+|     | |  |             ------------------ |   |||
+|     | |  |            |scriptId           |   |||
+|     | |  |            |rootDir            |   |||
+|     | |  |            |projectId -> clasp setting projectId <projectId> <--\ Step6
+|     | |  |            |                   |   |||                          |
+|     | |   ---------------------------------   |||                          |
+|     | |   ---------------------------------   |||                          |
+|     | |  |~/script/.clasp-localhost-cred.json |||                          |
+|     | |  |created on console.cloud.google.com  <----------------------------------------------\
+|     | |  |             Objects            |   |||                          |                  |
+|     | |  |             ------------------ |   |||                          |                  |
+|     | |  |            |installed          |   |||                          |                  |
+|     | |  |            |  client_id        |   |||                          |                  |
+|     | |  |            |  project_id       |   |||                          |                  |
+|     | |  |            |  client_secret    |   |||                          |                  |
+|     | |  |            |     (.....)       |   |||                          |                  |
+|     | |   ---------------------------------   |||                          |                  |
+|     | |   ---------------------------------   |||                          |                  |
+|     | |  |~/script/.clasprc.json          |   |||                          |                  |
+|     | |  |clasp login --creds .clasp-localhost-cred.json  ------> Step9    |                  |
+|     | |  |             Objects            |   |||                          |                  |
+|     | |  |             ------------------ |   |||                          |                  |
+|     | |  |            |token              |   |||                          |                  |
+|     | |  |            |   (....)          |   |||                          |                  |
+|     | |   ---------------------------------   |||                          |                  |
+|     |  -------------------------------------- |||                          |                  |
+|                                               |||                          |                  |
+--------------------------------------------------                           |                  |
+ -------------------------------------------------------------------------   |                  |
+|  ____ _                 _   ____  _       _    __                       |  |                  |
+| / ___| | ___  _   _  __| | |  _ \| | __ _| |_ / _| ___  _ __ _ __ ___   |  |                  |
+|| |   | |/ _ \| | | |/ _` | | |_) | |/ _` | __| |_ / _ \| '__| '_ ` _ \  |  |                  |
+|| |___| | (_) | |_| | (_| | |  __/| | (_| | |_|  _| (_) | |  | | | | | | |  |                  |
+| \____|_|\___/ \__,_|\__,_| |_|   |_|\__,_|\__|_|  \___/|_|  |_| |_| |_| |  |                  |
+|                                                                         |  |                  |
+|  console.cloud.google.com  /----------------------------------------------/                   |
+|       Variables: projectId , projectNumber (given), appName             |                     |
+|                                                                         |                     |
+|                                                                         |                     |
+|Step2>> New GCP Project                                                  |                     |
+|            >> Project Name "projectId" >> Location "No organisation"    |
+|                                                                 ---------> it will give as a projectNumber
+|Step3>> https://console.cloud.google.com/apis/credentials/consent?project=<projectId>                 |
+|                 >> External                                             |                     |      |
+|                         >> Create                                       |                     |      |
+|                                                                         |                     |      |
+|                  >> App name "clasp project"                            |                     |      |
+|                  >> User Support email                                  |                     |      |
+|                  >> Developer Contact Email                             |                     |      |
+|                             >> Save and Continue                        |                     |      |
+|                             >> Save and Continue                        |                     |      |
+|                  >> (Test Users) >> Add Users "youremail@gmail.com"     |                     |      |
+|                                     >> Save and Continue                |                     |      |
+|                                     >> Back to dashboard                |                     |      |
+|Step4>> Enable Apps Script API                                           |                     |      |
+|      >> https://console.cloud.google.com/apis/enableflow?apiid=script&project=<projectId>     |      |
+|              >> Next >> Enable                                          |                     |      |
+|                                                                         |                     |      |
+|Step8>> Create Oauth Credentials                                         |                     |      |
+|      >> https://console.cloud.google.com/apis/credentials?project=<projectId>                 |      |
+|           >> Create Credentials >> OAuth client ID                      |                     |      |
+|                  >> Application type "Desktop App"                      |                     |      |
+|                         >> Name "hostNameAA" -----------------------------------> (           |      |
+|                                 >> Create                               |                     |      |
+|                                 >> Download JSON  ~/script/.clasp-localhost-cred.json --------/      |
+|                                                                         |                            |
+|                                                                         |                            |
+ -------------------------------------------------------------------------                             |
+                                                                                                       |
+                                                                                                       |
+--------------------------------------------------                                                     |
+|                                                 |                                                    |
+|    ___ ____  _____                              |                                                    |
+|   |_ _|  _ \| ____|                             |                                                    |
+|    | || | | |  _|                               |                                                    |
+|    | || |_| | |___                              |                                                    |
+|   |___|____/|_____|                             |                                                    |
+|                                                 |                                                    |
+|    script.google.com                            |                                                    |
+|                                                 |                                                    |
+|Step5 >> Use classic Editor                      |                                                    |
+|         > Resources > Cloud Platform Projects   |                                                    |
+|                         > Enter Project Number  | <--------------------------------------------------/
+|                                  > Set project  |
+|                                                 |
+--------------------------------------------------
+```
+
+
+
+
