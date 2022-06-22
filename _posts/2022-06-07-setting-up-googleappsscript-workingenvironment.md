@@ -67,6 +67,7 @@ We will be using **Linux** , with `vim` , and `clasp` which is a tool that allow
 	3. Installing Clasp
 	4. Creating our first project.
 	5. Running functions from Clasp.
+	6. Seeing the execution log from the terminal.
 
 If you don't use `vim` you can skip 1 and 2.
 
@@ -332,6 +333,22 @@ clasp run main
 ```
 
 Sweating tears and blood we have tamed Google's beast.
+
+
+#### Step 6. Seeing the execution log from the terminal.
+
+`clasp` allows us also to check the excution logs from the commandline, this are been refreshed every 6 seconds. So we can use the following command to perform debugging of our Scripts from the terminal. 
+Note that this takes 30 seconds to execute, and also instead of `Logger.log()` use `console.log()` method.
+```
+clasp push ; clasp run main ; sleep 4; clasp logs
+```
+
+
+
+
+#### Setting up Clasp to run a function diagram
+
+
 Just to recap I have made a diagram [setup clasp to run a function gist](https://gist.github.com/450c68f34830a9d19c01b7a3a7200095)
 
 
@@ -474,7 +491,5 @@ clasp run functionName
 |                                                 |
 --------------------------------------------------
 ```
-
-
 
 
