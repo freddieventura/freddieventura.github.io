@@ -147,6 +147,31 @@ function functionOne () {
 }
 ```
 
+### Appendix: Property Keys Naming Convention
+
+All the code I have seen written online name the property Keys with Uppercase letters spaced by an underscore.
+As the engine is case sensitive, I don't see why the reason to not to use the same convention as your variables, meaning camelCase, this way it will be easier to edit chunks of code with `regexp`
+
+Therefore we can finally have
+
+```
+function main(){
+    var propertiesRef = PropertiesService.getScriptProperties();
+    propertiesRef.getProperty('myVar') ? 0 : propertiesRef.setProperty('myVar' , 'false');
+
+    functionOne();
+    Logger.log(propertiesRef.getProperty('myVar'));
+}
+function functionOne () {
+    var propertiesRef = PropertiesService.getScriptProperties();
+    propertiesRef.getProperty('myVar') ? 0 : propertiesRef.setProperty('myVar' , 'false');
+    /*
+        SOME CODE HERE
+    */
+    propertiesRef.setProperty('myVar' , 'true');
+
+}
+```
 
 ### Conclusion
 
