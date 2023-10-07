@@ -90,13 +90,13 @@ As you can see, you need to be careful with what the shell can interpret, in ter
 Doing a 'man bash' checking for different expansions and etc... having an in-depth understanding of those rules would be the ultimate objective giving you a clear understanding on what conflicts may arise on such a "translation", but in a nutshell It is important to pay attention to the following characters.
 
 - Quotes : Single (') and double (")
-- Escape characters: Such as the backslash ('\')
+- Escape characters: Such as the backslash ('\\')
 - Semicolon (;)
 - Ampersand (&)
-- Pipe (|)
+- Pipe (\|)
 - Dollar Sign ($)
 - Parentheses (()) and Curly Braces ({})
-- Brackets ([]) and Wildcards (*, ?, [])
+- Brackets ([]) and Wildcards (\*, ?, [])
 - Whitespaces
 - Quotes in Quotes:
 - Hashtags for Comments #.
