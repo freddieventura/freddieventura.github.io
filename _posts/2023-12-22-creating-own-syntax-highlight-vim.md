@@ -56,25 +56,29 @@ I use [FIGlet](http://www.figlet.org/) ASCII art text generator to create titles
 
 ## Actual vim process
 
-- 1st) Creating an automatic filetype detection
+### 1st) Creating an automatic filetype detection
 
 [ftdetect](https://vimhelp.org/filetype.txt.html#ftdetect)
 You need to create a subdirectory named `ftdetect` somewhere on your `runtimepath` 
 Normaly you would do this on your User namespace , so `mkdir -p $HOME/.vim/ftdetect`
 
-- 2nd) Create the extension filetype detector file
+### 2nd) Create the extension filetype detector file
 
 ```
 ~/.vim/ftdetect$ vim not.vim
 # with the directive
  au BufRead,BufNewFile *.not set filetype=not
 ```
-- 3rd) Create your custom syntax folder
+
+### 3rd) Create your custom syntax folder
+
 [mysyntaxfile](https://vimhelp.org/syntax.txt.html#mysyntaxfile)
 
 Similarily to step 1 , vim will parse from your `runtimepath` all the files from the subdirectory `syntax` so you want to `mkdir -p $HOME/.vim/syntax`
 
-- 4rd) Creating your own syntax file
+### 4th) Creating your own syntax file
+
+
 ```
 ~/.vim/syntax$ vim not.vim
 # with the following content
@@ -96,7 +100,7 @@ endif
 syntax match pmenu '[<>\/\-_|()'.,`]\+[<>\/\-_|()'.,`[:space:]]\{5,}\n'
 ```
 
-- 5th) Intro to defining the vim syntax file directive
+### 5th) Intro to defining the vim syntax file directive
 
 [sy-define](https://vimhelp.org/syntax.txt.html#%3Asyn-define)
 
@@ -119,7 +123,7 @@ What I am looking for in here is basicaly to make vim understand where it comes 
 
 I guess it could be done by Using a **Region** but provided that we are not completely new on *Regex* , I am gonna try to **Match** every character.
 
-- 6th) Time to regex
+### 6th) Time to regex
 
 So the logic for this regex would be, start looking for characters of the ASCII art such as `|\/-_` etc... , once you get one ocurrence, then check for more of them or whitespaces , a bunch of them say 5 till a line break. No more characters nothing. If you get 5 of them at least I am pretty sure it is going to be this. 
 
@@ -136,7 +140,7 @@ After you find your regex expression in my case.
 
 Remember vim falvoured Regex are different to otherones. If you are also in doubt and the expression has been correctly formulated, you can translate it using **ChatGPT** most definitely.
 
-- 7th) The Highlight groups
+### 7th) The Highlight groups
 
 [highlight](https://vimhelp.org/syntax.txt.html#%3Ahighlight)
 
@@ -157,7 +161,7 @@ You can see now an split with highlight-group names, and the way they are been d
 I have chosen `pmenu` (note their are case insensitive) 
 
 
-- 8th) Crafting your own vim syntax directive
+### 8th) Crafting your own vim syntax directive
 
 [syn-match](https://vimhelp.org/syntax.txt.html#%3Asyn-match)
 
@@ -186,4 +190,4 @@ As it has been done before I dont paste again the code.
 As you can see in the image of the post you can appreciate how beautiful our notes look like now.
 
 
-This is call ricing it , innit? :)
+This is what they call ricing it , innit? :)
