@@ -157,9 +157,9 @@ This will renew the certificates every 30 days at each 1st of each month
 ## Reference sources
 
 A series of references on the form of ^[1] , ^[2] , ... , are placed throughout the article to the following references.
-1. [How do I set up host records for a domain? - Domains - Namecheap.com](https://www.namecheap.com/support/knowledgebase/article.aspx/434/2237/how-do-i-set-up-host-records-for-a-domain/)
-2. [Securing Your Website with Let’s Encrypt: A Step-by-Step Guide to the ACME Protocol | by Sai Chander | Medium](https://medium.com/@saichander17/securing-your-website-with-lets-encrypt-a-step-by-step-guide-to-the-acme-protocol-f6a1c2d3a8e2)
+1. [How do I set up host records for a domain?](https://www.namecheap.com/support/knowledgebase/article.aspx/434/2237/how-do-i-set-up-host-records-for-a-domain/)
+2. [Securing Your Website with Let’s Encrypt: A Step-by-Step Guide to the ACME Protocol](https://medium.com/@saichander17/securing-your-website-with-lets-encrypt-a-step-by-step-guide-to-the-acme-protocol-f6a1c2d3a8e2)
 3. [Getting Started - Let's Encrypt](https://letsencrypt.org/getting-started/)
-4. [Protect your site for free with Let’s Encrypt SSL certificates and acmetool | by Grig Gheorghiu | Medium](https://griggheo.medium.com/protect-your-site-for-free-with-let-s-encrypt-ssl-certificates-and-acmetool-3139dd5af5d0)
+4. [Protect your site for free with Let’s Encrypt SSL certificates and acmetool](https://griggheo.medium.com/protect-your-site-for-free-with-let-s-encrypt-ssl-certificates-and-acmetool-3139dd5af5d0)
 
 
