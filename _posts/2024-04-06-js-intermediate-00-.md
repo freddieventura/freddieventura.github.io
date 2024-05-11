@@ -17,24 +17,23 @@ These terms barely have any technical meaning , but its purpose is merely compar
 In a given programming language design, a first-class citizen is an entity which supports all the operations generally available to other entities. These operations typically include being passed as an argument, returned from a function, and assigned to a variable.
 
 
-Some examples:
-    - Function pointers in C are first-class values because they can be passed to functions, returned from functions, and stored in heap-allocated data structures just like any other value.
-    - Functions in Pascal and Ada are not first-class values because although they can be passed as arguments, they cannot be returned as results or stored in heap-allocated data structures.
-
-    - Struct types are second-class types in C, because there are no literal expressions of struct type.
-    - In Java, the type int is second class because you can't inherit from it. Type Integer is first class.
-    - In C, labels are second class, because they don't have values and you can't compute with them.
+Some examples.
+ - Function pointers in C are first-class values because they can be passed to functions, returned from functions, and stored in heap-allocated data structures just like any other value.
+ - Functions in Pascal and Ada are not first-class values because although they can be passed as arguments, they cannot be returned as results or stored in heap-allocated data structures.
+ - Struct types are second-class types in C, because there are no literal expressions of struct type.
+ - In Java, the type int is second class because you can't inherit from it. Type Integer is first class.
+ - In C, labels are second class, because they don't have values and you can't compute with them.
 
 Other way of seeing it first-class vs non first-class citizens in programming is.
 
 Something is first-class if it is explicitly manipulable in the code. In other words, something is first-class if it can be programmatically manipulated at run-time.
 
 When something is reified at run-time, it becomes explicitly manipulable.
-    Reifiy stands for "make (something abstract) more concrete or real."
+Reifiy stands for "make (something abstract) more concrete or real."
 Some Examples
-    - We speak of first-class object, because objects can be manipulated programmatically at run-time (that's the very purpose).
-    - In java, you have classes, but they are not first-class, because the code can normally not manipulate a class unless you use reflection
-    - In java, you have packages (modules), but they are not first-class, because the code does not manipulate package at run-time.
+ - We speak of first-class object, because objects can be manipulated programmatically at run-time (that's the very purpose).
+ - In java, you have classes, but they are not first-class, because the code can normally not manipulate a class unless you use reflection
+ - In java, you have packages (modules), but they are not first-class, because the code does not manipulate package at run-time.
 
 
 According to the MDN Web Docs
