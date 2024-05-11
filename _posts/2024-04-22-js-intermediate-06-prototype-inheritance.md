@@ -1,5 +1,5 @@
 ---
-title: Javascript Intermediate 0
+title: Javascript Intermediate 6 - What is a prototype
 tags: javascript, programming, coding, nodejs, syntax
 article_header:
   type: cover
@@ -7,7 +7,115 @@ article_header:
     src: images/js-intermediate-dog-02.png
 ---
 
-# Title
+First off
+> All object literals in javascript inherit from Object.prototype global object
+
+
+```
+var myObject = { };
+console.log(myObject instanceof Object);     // True
+console.log(myObject instanceof Function);   // False
+```
+
+Also, out of the inheritance model we can say that 
+> Javascript objects have a property called prototype accessed as __proto__ , which behaves as a link to the parentObject prototype
+
+
+```
+var myObject = { }
+console.log(myObject.length);  // Undefined
+```
+
+But mutating the object
+
+```
+var myObject = {
+    __proto__ : Object.getPrototypeOf(Array)
+}
+
+console.log(myObject.length);        // 0
+```
+
+Or doing afterwards its creation
+
+
+```
+var myObject = { }
+Object.setPrototypeOf(myObject, Object.getPrototypeOf(Array));
+
+console.log(myObject.length);        // 0
+```
+
+Providing also that the new operator does
+```
+    -     new constructor() 
+    -     new constructor(arg1, arg2, /* ╬ô├ç┬¬, */ argN) 
+```
+
+In which Parameters are
+```
+ constructor 
+    A class or function that specifies the type of the object instance. 
+```
+
+It will check in its environment namespace for a function or a class of such a name. And return an instance of that function Constructor
+
+
+```
+function DimArray (width,height) {
+    this.width = width;
+    this.height = height;
+}
+
+var myDimArray = new DimArray(20,20);
+console.log(myDimArray);     //DimArray { width: 20, height: 20 }
+```
+
+Mind that this construct is a constructor function no the instance of the Object itself.
+__proto__ , property thus will not work the same way.
+
+
+```
+function DimArray (width,height) {
+    this.width = width;
+    this.height = height;
+    __proto__: Object.getPrototypeOf(Array);
+//    prototype: Object.getPrototypeOf(Array); // this wont work neither
+
+}
+
+var myDimArray = new DimArray(20,20);
+console.log(myDimArray.length);  // Undefined
+```
+
+You have to instead
+
+
+```
+function DimArray (width,height) {
+    this.width = width;
+    this.height = height;
+}
+DimArray.prototype = Object.create(Array.prototype);
+
+var myDimArray = new DimArray(20,20);
+```
+
+## Distinction between constructor Function prototype and Object Instance Prototype
+
+Instead the prototype property of the Constructor function , it will be similar to the prototype of an instance.
+
+
+```
+function DimArray (width,height) {
+    this.width = width;
+    this.height = height;
+}
+
+var myDimArray = new DimArray(20,20);
+console.log(Object.getPrototypeOf(myDimArray) === DimArray.prototype);  //  True
+```
+
 
 ## Javascript Intermediate tutorials
 
@@ -31,8 +139,3 @@ As main source of information I list the following.
  - [Mdn Web Docs Web API](https://developer.mozilla.org/en-US/docs/Web/API)
 
 Which I comfortably read from my terminal via [vim-dan](https://github.com/freddieventura/vim-dan)
-
-## Reference sources
-
-1. []()
-2. []()
