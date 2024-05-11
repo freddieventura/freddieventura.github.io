@@ -136,6 +136,55 @@ The space in which a variable is not able to be accessed due to not hoisting is 
 In the previous code regarding to myLet , the first 3 lines of code are a "temporal dead zone" for that variable as it cannot be accessed on there
 
 
+## Declaration vs Statement
+
+A declaration introduces a new variable, function, or block scope
+   Examples of declarations include variable declarations (var, let, const), function declarations (function keyword), and block declarations (if, for, while, etc.). 
+
+
+A statement is a unit of code that performs an action, it can be a declaration or an executable statement
+
+
+Note !! const and let the do declarations
+var does statement itself
+
+thus you cannot use a single line of const , or let on a codeblock , as it wont make it to a statement
+It makes sense as its scope is defined on that code-block, so if you dont use it you dont need it
+
+
+```
+// if (true) const myConst = 15; // SyntaxError: Unexpected token 'const'
+if (true) var myVar = 5;
+if (true) console.log('patxi');
+```
+
+## Differences between let and const
+
+The value of a constant can't be changed through reassignment using the assignment
+
+
+```
+const myConst = 10;
+let myLet = 15;
+
+// myConst = 2; // TypeError: Assignment to constant variable.
+myLet = 4;
+```
+
+
+## Differences let vs var
+
+let cannot be re-declared , var can
+
+
+```
+let myLet = 15;
+var myVar = 5;
+
+//let myLet = 4; // SyntaxError: Identifier 'myLet' has already been declared
+var myVar = 8;
+```
+
 
 ## Javascript Intermediate tutorials
 
