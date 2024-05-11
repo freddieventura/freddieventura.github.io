@@ -27,7 +27,9 @@ I have used **nodejs** as Execution environment.
 Apologies if the formatting is not perfectly coherent, but they are just a transcription of my notes to this markdown processor. 
 
 As main source of information I list the following :
+
     - [Mdn Web Docs Javascript](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
+
     - [Mdn Web Docs Web API](https://developer.mozilla.org/en-US/docs/Web/API)
 
 Which I comfortably read from my terminal via [vim-dan](https://github.com/freddieventura/vim-dan)
