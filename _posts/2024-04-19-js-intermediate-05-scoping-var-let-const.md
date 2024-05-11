@@ -162,6 +162,6 @@ Which I comfortably read from my terminal via [vim-dan](https://github.com/fredd
 
 ## Reference sources
 
- - [var - JavaScript | MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/var)
- - [let - JavaScript | MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/let)
- - [const - JavaScript | MDN] (https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/const)
+ - [var - JavaScript MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/var)
+ - [let - JavaScript MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/let)
+ - [const - JavaScript MDN] (https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/const)
