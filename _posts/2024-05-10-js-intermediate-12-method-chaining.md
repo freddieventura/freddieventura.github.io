@@ -1,5 +1,5 @@
 ---
-title: Javascript Intermediate 0
+title: Javascript Intermediate 12 - Method chaining in Javascript 
 tags: javascript, programming, coding, nodejs, syntax
 article_header:
   type: cover
@@ -7,7 +7,55 @@ article_header:
     src: images/js-intermediate-dog-02.png
 ---
 
-# Title
+**Method chaining** is a programming technique to allow better readiblity and writeability of objects, that allow you to call any instance method of the same object on the return object of another instance method.
+
+May be cryptic the definition, but lets see with an example.
+
+You declare a Class , with some instance methods (we are going to use pseudoclassical inheritance but can be doing classes).
+Remember the instance methods are defined on the prototype  property of the constructor function.
+
+You want to be able to apply any instance method to the return of that instance method such as.
+
+```
+popcorn.yesEdible().notEdible().yesEdible();
+```
+
+Indefinitely ...
+You just need to create that instance method returning the this keyword, it will return the instance in turn.
+
+```
+function Food (name) {
+    this.isEdible = true;
+}
+
+Food.prototype.yesEdible = function () {
+    this.isEdible = true;
+    return this;
+}
+Food.prototype.notEdible = function () {
+    this.isEdible = false;
+    return this;
+}
+const popcorn = new Food('Popcorn');
+popcorn.notEdible();
+console.log(popcorn); // Food { isEdible: false }
+popcorn.yesEdible().notEdible();
+console.log(popcorn); // Food { isEdible: false }
+popcorn.yesEdible().notEdible().yesEdible();
+console.log(popcorn); // Food { isEdible: true }
+```
+
+Which is the same syntax as
+
+```
+popcorn.yesEdible()
+    .notEdible()
+    .yesEdible()
+    .notEdible()
+
+console.log(popcorn); // Food { isEdible: false }
+```
+
 
 ## Javascript Intermediate tutorials
 
@@ -33,6 +81,4 @@ As main source of information I list the following.
 Which I comfortably read from my terminal via [vim-dan](https://github.com/freddieventura/vim-dan)
 
 ## Reference sources
-
-1. []()
-2. []()
+ - [Method Chaining in JavaScript - GeeksforGeeks](https://www.geeksforgeeks.org/method-chaining-in-javascript/)
