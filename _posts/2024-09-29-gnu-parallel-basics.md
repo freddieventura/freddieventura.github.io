@@ -7,627 +7,336 @@ article_header:
     src: images/gnu-parallel-basics-01.png
 ---
 
-Javascript allows concurrency in the sense that some functions can be executed and putted on the background , while they wait for some external process to finnish (send a message) such as I/O operations , network operations etc... . 
+# Introduction to GNU Parallel
 
-Using promises will help and clarify the way we deal with asynchronous operations in a syncrhonous way.
-Asnychronous running vs syncrhonous running comes from the way of dealing with functions that "branch out" of the normal sequencial execution , via the Callstack , waiting for a process to finnish in the background (waiting for an Event to happen)
-When that operation send this event to the JS engine it gets recorded in the Callback queue. So it will queue that Callback Function related to that event.
+`parallel` is a GNU utility that allows you to run processes simultaneously, sending them to different CPU cores, threads or even other hosts to be runned.
 
-As explained before, as soon as the Callstack is cleared out, the Event Loop will start executing the Callback queue in order.
+There are millions of use cases for this, and it is incredible useful when you need to process tasks that are CPU intensive or network intensive , or you are just lack of resources and need to find a way to `load balance` avoiding those bottle-necks
 
-
-There are two ways of dealing with this. You can asyncrhonously or syncrhonously run this associated callback Functions
-
- - Asynchronous execution means that each of this functions will be triggered in order according to the order of Receiving this Event Messages
-        
- - Synchronous execution is a way to sequence the execution of this Associated code, ensuring that only after the completion of one async process the nextone will take place and so on... , this will ensure the sequencial order of execution of processes regardless of the completion of them.
+Thinking twice before starting one if these batch processing tasks, can save you and your organization incredible amounts of time.
 
 
-Promises are a Global Object that define a simple syntax to deal with these operations
+In this article I will be explaining my usecase for this utility, and how to understand everything around the tools I am going to use.
+Basically I needed to run a batch processing task. Was in need of Indexing entire websites, which are sometimes made of Millions of files.
+Breaking down the tasks into getting a `url-list.txt` (spidering) , keeping track of what it has been downloaded so far and what not, been able to then start the download process from different hosts to multiply the Download Speed from the server is crucial to avoid bringing the Download time from Months to Weeks to days even hours. 
+
+Knowing how to parallel process this task is vital in this use case.
+
+As you can see the main point of this is to avoid **bottle necks** originated by the nature of the task, and the reources available to process that task, may they be:
+
+    - Processing power
+    - Storage availabilty
+    - Network resources
+
+In my case I am hitting with *Network Resources* and *Storage Availability* , I will be using `GNU parallel` to allocate and run the Download task across different hosts that can multiply my *Network Resources* capabilities , running also with *Storage Availability* issues as we will be seeing how I tackle this.
+
+Thus I will be more interested in the feature of `parallel` of running the task in different hosts, rather than running the task in different threads. I will give few examples of both.
+
+## Introduction: When can you load balance?
+
+Understanding always the nature of computing `load balancing techniques` , they can be achieved as long as the task can be broken down into different system calls to the Operating System, thus the processor.
+
+Understanding that CPU's can run just one process at a time, but contemporany CPU's are made of more than a single Core, thread etc... Operative systems work on the basis of allocating system calls to different threads according to their internals. Each ssystem call cannot be divided and sent to different threads for its execution to speed up its execution. Statements of programming languages often are made to run on a Single thread. 
+
+It is important then, nowadays that Programmers undersand the nature of **System Calls** knowing that their Code is made of a bunch of them, and if not specified otherwise , the program will run sequencially on a Single Thread, meaning that each System Call will have to wait for the previous one to be completed in order to start its execution.
+
+But some parts of a program or script, may be made of tasks that can run asynchronously in different threads. That will spead up the overall execution time of the program. Identifying them and programming to **load balance** these tasks into additional threads in the CPU, or even (if they are networking tasks) you can spread its execution across different Hosts. This is the great usefullness of `GNU parallel`
+
+
+
+## Installing parallel, and sources of information
+
+
+You may want to install the package available on your distro repositories. My opinion is that I have had mixed, results with different versions. Being an old-stable one buggy with some issues, being the latest one buggy too so I recommend this version.
+
+```
+wget https://ftp.gnu.org/gnu/parallel/parallel-20240222.tar.bz2
+sudo tar xjf parallel-20240222.tar.bz2
+sudo ./configure && make
+sudo make install
+```
+
+If you want to get familiarised with `parallel` I recommend you to follow their tutorials found on their manuals, just gonna do a quick view in here with my understanding of it which may be not 100% accurate. `man parallel` `man 
+
+```
+man parallel
+man parallel_tutorial
+man parallel_examples
+man env_parallel 
+```
+
+
+## Breakdown on how to build the command-line
+
+By the nature of the utility which deals with running other commands within a command, running this directly in the *shell* or inside a *shell-script* the syntax can get quite overwhelming , loosing the ability to understand what is doing each part, how to avoid escaping issues with the Shell or with the commands used.
+
+Taking up some simple commands
+
+```
+# Running a command with one argument, multiple times (varying the arguments)
+## Arguments been read from the CLI directly
+parallel echo ::: 'pep' 'costa' 'tom'
+# Output
+pep
+costa
+tom
+
+## Arguments been read from stdin
+# newlines are interpretted as arguments to be executed parallely on the same command
+echo -e "pep\ncosta\ntom" | parallel echo
+# Same Output
+
+
+## Arguments been read from a file
+# input.txt
+pep
+costa
+tom
+#
+parallel -a "input.txt" echo
+# Same Output
+
+## Running in a script
+# myscript.sh
+#!/bin/bash
+printing_stuff() {
+    echo $1
+}
+export -f printing_stuff
+parallel printing_stuff ::: 'pep' 'costa' 'tom'
+
+#
+./myscript.sh
+# Same Output
+```
+
+You can achieve the same of this examples with different syntaxes, refining the combinations to achieve different things, refer to the documentation for that, we will be keeping it simple in here to achieve what we wanted.
+
+Clarifying the last example. Running it inside a script with a function, you need to export that function in bash with `export -f` statement , then you can recall that function `parallel my_func`
+
+
+### Allocating jobs in different threads
+
+In the examples before all the echo commands were sent to different threads to be runned parallely as many as possible (that is the default behavior). As soon as each return it will be logged on the stdout (asyncrhonous execution) 
+So if one of the jobs will take longer, even if executed first it will finnish the execution later
+
+Note `{}` is a replacement string for all the arguments been passed to that job
+
+```
+echo -e "5\n2\n1" | parallel 'sleep {}; echo {}'
+# Output
+1
+2
+5
+```
+
+We can pick now different parameters to be used in different parts of our command
+`{n}` will be replace by parameter no `n`
+
+Though we need to specify how to separate the parameters in our input, we will tell that for each `whitespace` it will be a different parameter.
+`--colsep " "`
+
+```
+echo -e "5 pep\n2 costa\n1 tom" | parallel --colsep " " 'sleep {1}; echo {2}'
+# Output
+tom
+costa
+pep
+```
+
+We have demonstrated that tom returns earlier than pep despite it's execution have been started earlier.
+
+That is because `parallel` runs those jobs in as many threads as possible by default.
+You can change this by doing `-j <num-jobs>` to run maximum those number of jobs parallely.
+
+```
+echo -e "5 pep\n2 costa\n1 tom" | parallel -j 1 --colsep " " 'sleep {1}; echo {2}'
+# Output
+pep
+costa
+tom
+```
+
+If 1 job is running parallely it will be a sequenced execution (synchronous)
+
+
+### No arguments
+
+You can truncate the number of arguments been sent to the command with `-n <numer>`
+In the special case that you have run commands that need no arguments as input, `parallel` wont let you , pass arguments and use `-n0`
+
+```
+echo -e "Whatever\nNothing" | parallel -n0 "ip addr"
+## Will run twice asyncrhonously the command ip addr
+```
+
+### Remote execution, running jobs in other hosts
+
+
+We are going to run a bash function in different hosts:
+First we need to pass each Host IP we want to use for the execution after `-S`
+We keep adding more to add more the more hosts we want to add up for the processing.
+Note that to execute the function we need to pass it's name as an environment variable with `--env <function_name>`
+Note also that if you want to your localhost to be added to the pool of hosts that execute the processes, you need to add it manually `-S 127.0.0.1` (is not added by default)
+
+```
+# input.txt
+pep
+costa
+tom
+
+# my_script.sh
+check_hostname(){
+    echo $HOSTNAME
+}
+export -f check_hostname
+
+parallel --env check_hostname -S <WAN_SERVER> -S <LOCAL_HOST> -n0 -a "input.txt" check_hostname
+
+# Output
+<LOCAL_HOST>
+<LOCAL_HOST>
+<WAN_SERVER> 
+```
+
+Would it have been `parallel -S <WAN_SERVER> -S <LOCAL_HOST> -n0 -a "input.txt" check_hostname` it wouldnt have worked
+
+
+### Sending environment variables to the remote host
+
+Sometimes you want to work with different data across the hosts
+If you need the otherhosts, to adopt certain environment variables of the executing host you need to use `env_parallel` and then add that environment variable with `--env <MY_VAR>`
 
 
 ```
-console.log(Reflect.ownKeys(Promise));
-// ['length', 'name', 'prototype', 'all', 'allSettled', 'any', 'race', 'resolve', 'reject', Symbol(Symbol.species)]
-console.log(Reflect.ownKeys(Promise.prototype));
-// ['constructor', 'then', 'catch', 'finally', Symbol(Symbol.toStringTag)]
+# my_script.sh
+source `which env_parallel.bash`
+check_hostname(){
+    echo $HOSTNAME
+}
+export -f check_hostname
+
+env_parallel --env check_hostname --env HOSTNAME -S <WAN_SERVER> -S <LOCAL_HOST> -n0 -a "input.txt" check_hostname
+
+# Output
+<LOCAL_HOST>
+<LOCAL_HOST>
+<LOCAL_HOST> 
 ```
 
-For our example we will be Creating a process that gets delayed, waiting for that timer to return an event which upon completion will register a callbackFunction in the Callback Queue
 
-We wont be using callback functions anymore. Lets use a promise straightaway , for this the function needs to return a Promise , with a resolveFunc and rejectFunc (former not strictly neededfor the example although real processes may get rejected)
+### Reading environment variables from the remote host
 
+In complex script interactions, you may want to define host-specific values, to perform certain things differently in each one.
 
- - The function needs to return the promise Object
- - The resolveFunc , needs to be executed and will be the exit point of the function.
-Note!!
-   - The resolveFunc() , needs to be executed at the end of async Function.
-   - If executed outside the async Function , eventhought it is inside the Promise, it will be recorded in the call
-
-## Wrong way of calling it
-
+This is not strictly of `GNU parallel` but I have found that trying to remotely echo a variable that has been defined in `$HOME/.bashrc` is not working. And it is not caused specificaly by no `GNU parallel` configuration but it is an actual `ssh` security feature
+The variables we want to be accessing through ssh need to be contained in a file called `$HOME/.ssh/environment`
 
 ```
-function delayedMessage(delay, message) {
-    return new Promise ( (resolveFunc, rejectFunc) => {
-        setTimeout ( () => {
-            console.log(message);
-        }, delay)
-            resolveFunc(); // This is called immediately after setTimeout is called
-    })
+MY_VAR=some value
+```
+
+Then change `/etc/ssh/sshd_config` directive
+
+```
+PermitUserEnvironment yes
+```
+
+Restart your `sshd server` and try echoing from another host
+
+```
+ssh hostIp 'echo ${MY_VAR}'
+# Output
+some_value
+```
+
+
+### Putting this together
+
+See the example below
+
+`vim parallel_echo_variables.sh`
+
+```
+#!/bin/bash
+
+## Previously I have modified ./.bashrc and $HOME/.ssh/environment
+## In each host (they hold different values)
+# DOWN_PATH=/home/fakuve/downloads
+
+source `which env_parallel.bash`
+
+## SETTING GLOBAL SCRIPT VARIABLES
+# this will be shared regardless to which hosts is executing
+MASTER_HOSTNAME=$(hostname)
+MASTER_DOWNPATH=${DOWN_PATH}
+
+
+main() {
+
+# each newline echoed will fire the command 1 more time (just for testing)
+echo -e ' \n ' | env_parallel \
+        `## PARALLEL ARGUMENTS` \
+        -n0 \
+        --jobs 1 \
+        `## GLOBAL SCRIPT VARIABLES` \
+        --env MASTER_HOSTNAME \
+        --env MASTER_DOWNPATH \
+        `## FUNCTIONS TO BE EXECUTED` \
+        --env echo_variables \
+        `## WORKER_HOSTS` \
+        -S 192.168.43.241 \
+        -S 127.0.0.1 \
+        `## FUNCTION TO CALL` \
+        echo_variables \
+
 }
 
+echo_variables() {
 
-delayedMessage(300, 'First Message')
-    .then( () =>  delayedMessage(200, 'Second Message'))
-    .then( () =>  delayedMessage(100, 'Third Message'))
-// Third Message
-// Second Message
-// First Message
-```
+    echo "WORKER_HOST      : ${HOSTNAME}"
+    echo "WORKER_DOWNPATH  : ${DOWN_PATH}"
+    echo "MASTER_HOST      : ${MASTER_HOSTNAME}"
+    echo "MASTER_DOWNPATH  : ${MASTER_DOWNPATH}"
+    echo "-------------------------------------"
 
-In this previous example the resolveFunc() is placed outside the setTimeout callbackFunc(), which means it is invoked inmediatly after the setTimeout() function is called (outside it) .
- - This results in the resolvFunc() being called before the delayed specified by setTimeout and as a result promises are resolved almost inmediately.
- - Upon execution what it happens is that the program will run all the functions in its callstack , once it finnish , it will go to the callbackstack
-
- - The callbackstack will be formed in the order the functions have finnished their execution, and as the resolvFunc() is outside the setTimeout Callback , it will get executed inmediately.
- - So the order of the callback stack will be the order in which the Async operations had finnished running, effectively the delay will determine the messages to output (console.log(message)
-
-
-Doing it the good way is basically nesting its execution. If you call the resolveFunc() within the setTimeout, you will be calling it recursively.
- - It will print the message then call the next callback passed with .then , as so forth.
-
-```
-function delayedMessage(delay, message) {
-    return new Promise ( (resolveFunc, rejectFunc) => {
-        setTimeout ( () => {
-            console.log(message);
-            resolveFunc(); // Calling resolveFunc(); recursively
-        }, delay)
-    })
 }
+export -f echo_variables
+
+main
 
 
-delayedMessage(300, 'First Message')
-    .then( () =>  delayedMessage(200, 'Second Message'))
-    .then( () =>  delayedMessage(100, 'Third Message'))
-
-
-// First Message
-// Second Message
-// Third Message
+### Output
+#WORKER_HOST      : verneynas
+#WORKER_DOWNPATH  : /home/fakuve/files/downloads
+#MASTER_HOST      : elitebook-x360
+#MASTER_DOWNPATH  : /home/fakuve/downloads
+#-------------------------------------
+#WORKER_HOST      : elitebook-x360
+#WORKER_DOWNPATH  : /home/fakuve/downloads
+#MASTER_HOST      : elitebook-x360
+#MASTER_DOWNPATH  : /home/fakuve/downloads
+#-------------------------------------
 ```
 
-Mind also that adding some messages outside the Async function , will get executed always first as they are part of the main function. They will live in the callstack queue before the other code that starts its execution in the callback queue
+You can see how we can proceed with clarity from now on.
+At the begining of the script we assing the GLOBAL SCRIPT VARIABLES, which regardless of which host is the caller they are not going to be modified. In this case I like to call `MASTER_<VARNAME>` to caller variables, and to host specific variables will call them `WORKER_<VARNAME>`
+
+As you can see the MASTER variables need to be also passed via `env_parallel` , dont forget that.
+The rest they get assigned for each call of parallel in each host. For clarity you can reassign them within the function
 
 ```
-function delayedMessage(delay, message) {
-    return new Promise ( (resolveFunc, rejectFunc) => {
-        setTimeout ( () => {
-            console.log(message);
-            resolveFunc(); 
-        }, delay)
-    })
-}
-
-console.log('Callstack one');   // --------> Directly to the callstack queue
-console.log('Callstack two');   //--------> Directly to the callstack queue
-
-delayedMessage(300, 'First Message')
-    .then( () =>  delayedMessage(200, 'Second Message'))
-    .then( () =>  delayedMessage(100, 'Third Message'))
-```
-
-If our function is returning some data, this will be sent as the argument on resolveFunc(returnVar)
-Now handling it it is a bit different , as remember if you are going to use more than one line in the arrow function you need to be using the return statement.
-
-
-
-```
-function delayedMessage(delay, message) {
-    return new Promise ( (resolveFunc, rejectFunc) => {
-        setTimeout ( () => {
-            resolveFunc(message); 
-        }, delay)
-    })
-}
-
-
-delayedMessage(300, 'First Message')
-    .then( (message) => { 
-        console.log(message);
-        return delayedMessage(200, 'Second Message');
-    })
-    .then( (message) => { 
-        console.log(message)
-        return delayedMessage(100, 'Third Message');
-    })
-    .then ( (message) => {
-        console.log(message)
-    });
-```
-
-
-We havent used rejectFunc , but it should be called upon failure of completion of the procedure Also recursively (inside setTimeout()) 
- - See in this example if we pass on a message that is too long it will be rejected
- - See for the chained execution , .catch() it will be the last method to call in the chain.
- - If any of the executions is rejected , at that time this will return the Error message , and not carry on with the following .then()
- - Note in the example you can change the commented out lines to appreciate that
-
-
-```
-function delayedMessage(delay, message) {
-    return new Promise ( (resolveFunc, rejectFunc) => {
-        setTimeout ( () => {
-            if ( message.length < 20 ) {
-                resolveFunc(message); 
-            } else {
-                rejectFunc('Message too long');
-            }
-        }, delay)
-    })
-}
-
-
-delayedMessage(300, 'First Message')
-    .then( (message) => { 
-        console.log(message);
- //       return delayedMessage(200, 'Second Message');
-        return delayedMessage(200, 'Second Message which is gonna be rejected');
-    })
-    .then( (message) => { 
-        console.log(message)
-        return delayedMessage(100, 'Third Message');
-//        return delayedMessage(100, 'Third Message which is gonna be rejected');
-    })
-    .then ( (message) => {
-        console.log(message)
-    })
-    .catch ( (error) => {
-        console.log(error);
-    });
-
-// First Message
-// Message too long
-```
-
-Note , API's written for asyncrhonous purposes need to follow some guidelines. In this case the calls of either callbacks (resolveFunc) or (rejectFunc) they are executed in the context of setTimeout() , if not it would be called syncrhonously , added to the  normal callstack (not the callback queue) , and will be executed always first.
-This would lead to a "state of Zalgo" which is undesirable
-
-
-```
-function delayedMessage(delay, message) {
-    return new Promise ( (resolveFunc, rejectFunc) => {
-        if ( message.length < 20 ) {
-            setTimeout ( () => {
-                resolveFunc(message); 
-            }, delay)
-        } else {
-                rejectFunc('Message too long'); // This would go straightaway to the callstack
-        }
-    })
+echo_variables() {
+WORKER_HOST=${HOSTNAME}
+WORKER_DOWNPATH=${DOWN_PATH}
 }
 ```
 
+Note that `DOWN_PATH` has been assigned for each host in each `.bashrc` and `$HOME/.ssh/environment`
 
-Promise.prototype.finally() method , will be executed upon completion of the execution of the promise block, (we can say that the promise has been settled) , this code will be execute regardless of if any .catch() has been found on the promise block or not
 
 
+## Conclusion
 
-```
-function delayedMessage(delay, message) {
-    return new Promise ( (resolveFunc, rejectFunc) => {
-        setTimeout ( () => {
-            if ( message.length < 20 ) {
-                resolveFunc(message); 
-            } else {
-                rejectFunc('Message too long');
-            }
-        }, delay)
-    })
-}
-
-
-delayedMessage(300, 'First Message')
-    .then( (message) => { 
-        console.log(message);
- //       return delayedMessage(200, 'Second Message');
-        return delayedMessage(200, 'Second Message which is gonna be rejected');
-    })
-    .then( (message) => { 
-        console.log(message)
-        return delayedMessage(100, 'Third Message');
-//        return delayedMessage(100, 'Third Message which is gonna be rejected');
-    })
-    .then ( (message) => {
-        console.log('Promise Fulfilled');
-        console.log(message);
-    })
-    .catch ( (error) => {
-        console.log(error);
-    })
-    .finally ( () => {
-        console.log('Promise Settled');
-    });
-
-// First Message
-// Message too long
-// Promise Settled
-```
-
- We can determine 2 states of a promise then
- - Pending: The promise is waiting for an asyncrhonous operation to complete
- - Settled: When the promise has finnished all its operations
-   - Fulfilled (Resolved): All the operations had exited by the resolveFunc();
-   - Rejected: At least one of the operations had exited by the rejectFunc();
-
-
-Unless we create our own library, the most common scenario is that we are going to use API's with Object methods that return promises, so lets use one.
-
-Lets use  fetch api()
-Fetching a website , note from mdn.webapi
-
-
-```
-# API fetch() global function # 
-    fetch(resource, options) 
- resource 
-    -   A string or any other object with a stringifier including a 
- options  Optional  
-Return value 
-A  Promise that resolves to a  Response object. 
-
-# API Response # 
-
-Instance methods
-
- Response.text()
-
-    Returns a promise that resolves with a text representation of the
-    response body.
-
-Response: text() method
-Return value 
-
-A Promise that resolves with a  String . 
-
-```
-
-1st thing will get the response object.
-
-
-```
-fetch('https://lukesmith.xyz')
-    .then( (response) => { 
-        console.log(response.ok);
-    })
-    .catch( (reject) => { 
-        console.log(reject);
-    })
-    .finally( () => {
-        console.log('Finnished executing fetch()');
-    });
-
-// True
-// Finnished executing fetch()
-```
-
-2nd we will be transforming it to a string with its .text() instance method
-
-
-```
-fetch('https://lukesmith.xyz')
-    .then( (response) => { 
-        response.text() 
-            .then( (text) => {
-                console.log(text);
-            });
-    })
-    .catch( (reject) => { 
-        console.log(reject);
-    })
-    .finally( () => {
-        console.log('Finnished executing fetch()');
-    });
-
-
-// Finnished executing fetch()
-// ALL HTML OF THE WEBSITE TO STDOUT
-```
-
-Say that we will be using the wrong url such as lukasmith.xyz
-
-
-```
-fetch('https://lukasmith.xyz')
-    .then( (response) => { 
-        response.text() 
-            .then( (text) => {
-                console.log(text);
-            });
-    })
-    .catch( (reject) => { 
-        console.log(reject);
-    })
-    .finally( () => {
-        console.log('Finnished executing fetch()');
-    });
-
-// TypeError: fetch failed
-// ....
-//   cause: Error: getaddrinfo ENOTFOUND lukasmith.xyz
-// ...
-// Finnished executing fetch()
-```
-
-We dont want floating promises, this are the ones that dont have a return statement, in our previous case we had a promises that itself called console.log(text); but it was a floating promise in the sense that it didnt return anything.
-
-The best way is to have a .then() , case at the end handling the result
-Quoting the mdnjs docs , 
-
-```
-Therefore, as a rule of thumb, whenever your operation encounters a
-promise, return it and defer its handling to the next  then handler.
-```
-
-
-```
-fetch('https://lukesmith.xyz')
-    .then( (response) => { 
-        return response.text()  // -----> Now it returns a value
-            .then();
-    })
-    .then( (result) => {        // We perform whatever action
-        console.log(result);    // we want with the result
-    })                          // 
-    .catch( (reject) => { 
-        console.log(reject);
-    })
-    .finally( () => {
-        console.log('Finnished executing fetch()');
-    });
-
-
-// ALL HTML OF THE WEBSITE TO STDOUT
-// Finnished executing fetch()
-```
-
-Chaining loads of promises together will end up us having severe nested .then for that we have got the following syntax
-async function (we will check them latter)
-
-
-Running async operations concurrently.
-These methods all run promises concurrently - a sequence of promises are
-started simultaneously and do not wait for each other. 
-
-There are four composition tools for running asynchronous operations
-concurrently:  Promise.all() ,  Promise.allSettled() ,  Promise.any() ,
-and  Promise.race() .
-
-The  Promise.all() static method takes an iterable of promises as input 
-and returns a single  Promise . This returned promise fulfills when all
-of the input's promises fulfill (including when an empty iterable is 
-passed), with an array of the fulfillment values. It rejects when any of
-the input's promises rejects, with this first rejection reason.
-
-
-```
-function processMessage (delay, message) {
-    return new Promise ( (resolveFn, rejectFn) => {
-        setTimeout(() =>{ 
-            resolveFn(message);
-        }, delay);
-    });
-}
-
-var promiseArray = [processMessage(1000, "firstMessage"), processMessage(2000, "secondMessage")];
-Promise.all(promiseArray).then( (resolve) => {
-    console.log(resolve);
-});
-// [ 'firstMessage', 'secondMessage' ]
-```
-
-Now the same example but with one of the promises rejecting. 
-If any of the promises does reject, it will only exit that message.
-
-
-```
-function processMessage (delay, message) {
-    return new Promise ( (resolveFn, rejectFn) => {
-        setTimeout(() =>{ 
-            if ( message.length < 20 ) {
-                resolveFn(message);
-            } else {
-                rejectFn('Message too long');
-            }
-        }, delay);
-    });
-}
-
-var promiseArray = [processMessage(1000, "firstMessage"), processMessage(1000, "this is gonna be failing"), processMessage(2000, "thirdMessage")];
-Promise.all(promiseArray).then( (resolveMsg) => {
-    console.log(resolveMsg);
-})
-    .catch( (rejectMsg) => {
-        console.log(rejectMsg);
-    });
-
-// Message too long
-```
-
-Promise.allSettled()
-
-Promise.allSettled(iterable) 
-It is similar to Promise.all() , it also waits for the promise to Settle, executing their resolveFn when they fullfill or the rejectFn when they get rejected. It will return an array with object with the value of each promise and its status as fullfilled or rejected
-
-
-
-```
-function processMessage (delay, message) {
-    return new Promise ( (resolveFn, rejectFn) => {
-        setTimeout(() =>{ 
-            if ( message.length < 20 ) {
-                resolveFn(message);
-            } else {
-                rejectFn('Message too long');
-            }
-        }, delay);
-    });
-}
-
-var promiseArray = [processMessage(1000, "firstMessage"), processMessage(1000, "this is gonna be failing"), processMessage(2000, "thirdMessage")];
-Promise.allSettled(promiseArray).then( (message) => {
-    console.log(message);
-})
-
-/*
-[
-  { status: 'fulfilled', value: 'firstMessage' },
-  { status: 'rejected', reason: 'Message too long' },
-  { status: 'fulfilled', value: 'thirdMessage' }
-]
-*/
-```
-
-Promise.any()
-Basically this method will return the firstone of the promises to be fulfilled (so just a single promise not an array) , omiting the rejections.
-
-
-
-```
-var promiseArray = [processMessage(2000, "firstMessage"), processMessage(500, "this is gonna be failing"), processMessage(1000, "thirdMessage")];
-Promise.any(promiseArray).then( (message) => {
-    console.log(message);
-})
-
-// thirdMessage
-```
-
-Promise.race()
-Theseone similar to Promise.any() but it will take the result of the firstone Settled ,taking too rejections. 
-In this case we need to use .catch() to catch the errors
-
-```
-var promiseArray = [processMessage(2000, "firstMessage"), processMessage(500, "this is gonna be failing"), processMessage(1000, "thirdMessage")];
-Promise.race(promiseArray).then( (resolveMsg) => {
-    console.log(resolveMsg);
-})
-    .catch(  (rejectMsg) => {
-        console.log(rejectMsg);
-    })
-
-// Message too long
-```
-
-Using static methods such as Promise.resolve() Promise.reject()
-Both of these methods return a promise either resolved or rejected (already fulfilled)
-with a certain value.
-
-```
-Promise.resolve(value)
-Promise.reject(value)
-```
-
-This may serve some purposes
- - Converting non-promises into promises.
-If you need an object to be used as a Promise in a method that expect a Promise , you can use this
-
-Using the previous example, lets use the Promise.all() method passing an array in which one of the members is a number. We will make it  promise with either one of the Methods .resolve() or .reject()
-
-
-
-```
-const promiseOne = 25;
-var promiseArray = [promiseOne, processMessage(2000, "firstMessage"), processMessage(1000, "thirdMessage")];
-
-Promise.all(promiseArray)
-    .then ( (resolveMsg) => { 
-       console.log(resolveMsg); 
-    })
-
-// [ 25, 'firstMessage', 'thirdMessage' ]
-```
-
-- Use it for error handling. We can re-write our async function in
-
-
-```
-function processMessage (delay, message) {
-    if (message.length < 4) {
-        return Promise.reject('Message is too short');
-    }
-    return new Promise ( (resolveFn, rejectFn) => {
-        setTimeout(() =>{ 
-            if ( message.length < 20 ) {
-                resolveFn(message);
-            } else {
-                rejectFn('Message too long');
-            }
-        }, delay);
-    });
-}
-
-processMessage(100 , 'lo')
-    .then( (resolveMsg) => { 
-        console.log(resolveMsg);
-    })
-    .catch( (rejectMsg) => {
-        console.log(rejectMsg);
-    })
-```
-
-Or you can just start a promise chain with it
-
-
-```
-Promise.resolve()
-    .then( (message) => {
-       return processMessage(200, 'First Message');
-    })
-    .then( (message) => {
-        console.log(message)
-        return processMessage(100, 'Second Message');
-    })
-    .then ( (message) => {
-        console.log('Promise Fulfilled');
-        console.log(message);
-    })
-    .catch ( (error) => {
-        console.log(error);
-    })
-    .finally ( () => {
-        console.log('Promise Settled');
-    });
-```
-
-Note for error handling it is adecuate to throw an error inside the catch , as if not the Promise chain will carry on executing regardless of the .catch()
-
-
-
-## Javascript Intermediate tutorials
-
-This tutorial is part of **freddieventura** Javascript Intermediate tutorials.
-By writting this I aim to give my little contribution to all of those who are in the process of learning Javascript taking it a step further.
-
-May I have been lucky a Search Engine has taken you here, I did pass you the link, or you are my follower for any other reason, I encourage you to take your time and read through it.
-
-None of the text has been written with the help of LLM (AI), only the head image.
-
-The tutorial are examples I have been executing myself in order to proove the concepts.
-I encourage you to do your own ones. 
-
-I have used **nodejs** as Execution environment.
-
-
-Apologies if the formatting is not perfectly coherent, but they are just a transcription of my notes to this markdown processor. 
-
-As main source of information I list the following.
- - [Mdn Web Docs Javascript](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
- - [Mdn Web Docs Web API](https://developer.mozilla.org/en-US/docs/Web/API)
-
-Which I comfortably read from my terminal via [vim-dan](https://github.com/freddieventura/vim-dan)
-
-## Reference sources
-
-1. []()
-2. []()
+After all of this we will have unravelled this `gnu parallel` tool, and will be able to work with it for our use case in the next chapter.
+**Building up a parallel webcrawler**
