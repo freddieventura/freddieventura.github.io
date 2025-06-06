@@ -275,7 +275,7 @@ MASTER_DOWNPATH=${DOWN_PATH}
 main() {
 
 # each newline echoed will fire the command 1 more time (just for testing)
-echo -e ' \n ' | env_parallel \
+seq 2 | env_parallel \
         `## PARALLEL ARGUMENTS` \
         -n0 \
         --jobs 1 \
@@ -334,6 +334,42 @@ WORKER_DOWNPATH=${DOWN_PATH}
 
 Note that `DOWN_PATH` has been assigned for each host in each `.bashrc` and `$HOME/.ssh/environment`
 
+
+
+## Extra chapter, parallel environment variables
+
+In for execution parallel sets some environments variables that you can access.
+See `man parallel` `Environment Variables`
+
+Example
+
+```
+#!/bin/bash
+
+main(){
+    seq 2 | parallel -n0 \
+            --jobs 1 \
+            -S 192.168.43.241 \
+            -S 127.0.0.1 \
+            --env echo_info \
+            echo_info
+}
+
+
+echo_info(){
+    echo ${PARALLEL_SSHLOGIN}
+}
+export -f echo_info
+
+main
+```
+
+Will output
+
+```
+127.0.0.1
+192.168.43.241
+```
 
 
 ## Conclusion
